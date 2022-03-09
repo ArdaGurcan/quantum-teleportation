@@ -53,20 +53,21 @@ circuit.save_statevector()
 result = aer_sim.run(circuit).result()
 counts = result.get_statevector()
 
-# # run circuit on actual quantum computer
-# IBMQ.load_account()
+# run circuit on actual quantum computer
+IBMQ.load_account()
 
-# # get the least busy backend
-# provider = IBMQ.get_provider(hub='ibm-q')
-# backend = least_busy(provider.backends(filters=lambda x: x.configuration().n_qubits >= 5 and not x.configuration().simulator and x.status().operational))
-# print("Running on least busy backend:", backend)
+# get the least busy backend
+provider = IBMQ.get_provider(hub='ibm-q')
+backend = least_busy(provider.backends(filters=lambda x: x.configuration().n_qubits >= 5 and not x.configuration().simulator and x.status().operational))
+print("Running on least busy backend:", backend)
 
-# # run circuit
-# transpiled_circuit = transpile(circuit, backend, optimization_level=3)
-# job = backend.run(transpiled_circuit)
-# result = job.result()
-# counts = result.get_statevector()
-plot_bloch_multivector(partial_trace(counts, [0, 1,2,3]))
+# run circuit
+transpiled_circuit = transpile(circuit, backend, optimization_level=3)
+job = backend.run(transpiled_circuit)
+result = job.result()
+counts = result.get_statevector()
+
+plot_bloch_multivector(partial_trace(counts, [0,1,2,3]))
 plt.savefig("final_qubit.svg")
 
 plt.show()
